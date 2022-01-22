@@ -72,55 +72,66 @@ Add a New Employee
   return inquirer
     .prompt([
       {
-        type: 'input',
-        name: 'name',
-        message: 'What is the name of your project? (Required)',
-        validate: nameInput => {
-          if (nameInput) {
-            return true;
-          } else {
-            console.log('You need to enter a project name!');
-            return false;
-          }
-        }
-      },
-      {
-        type: 'input',
-        name: 'description',
-        message: 'Provide a description of the project (Required)',
-        validate: descriptionInput => {
-          if (descriptionInput) {
-            return true;
-          } else {
-            console.log('You need to enter a project description!');
-            return false;
-          }
-        }
-      },
-      {
-        type: 'checkbox',
-        name: 'languages',
-        message: 'What did you this project with? (Check all that apply)',
-        choices: ['JavaScript', 'HTML', 'CSS', 'ES6', 'jQuery', 'Bootstrap', 'Node']
-      },
-      {
-        type: 'input',
-        name: 'link',
-        message: 'Enter the GitHub link to your project. (Required)',
-        validate: linkInput => {
-          if (linkInput) {
-            return true;
-          } else {
-            console.log('You need to enter a project GitHub link!');
-            return false;
-          }
-        }
-      },
-      {
         type: 'confirm',
-        name: 'feature',
-        message: 'Would you like to feature this project?',
-        default: false
+        name: 'engRank',
+        message: "Is this employee an Engineer?",
+        default: true,
+        },
+      {
+        type: 'input',
+        name: 'engName',
+        message: "What is this engineer's name?",
+        when: ({ engRank }) => engRank,
+        validate: engNameInput => {
+          if (engNameInput) {
+            return true;
+          } else {
+            console.log("What is this engineer's name?");
+            return false;
+          }
+        }
+      },
+      {
+        type: 'input',
+        name: 'engID',
+        message: "What is this engineer's employee ID?",
+        when: ({ engRank }) => engRank,
+        validate: engIDInput => {
+          if (engIDInput) {
+            return true;
+          } else {
+            console.log("What is this engineer's employee ID?");
+            return false;
+          }
+        }
+      },
+      {
+        type: 'input',
+        name: 'engEmail',
+        message: "What is this engineer's email?",
+        when: ({ engRank }) => engRank,
+        validate: engEmailInput => {
+          if (engEmailInput) {
+            return true;
+          } else {
+            console.log("What is this engineer's email?");
+            return false;
+          }
+        }
+      },
+      {
+        type: 'input',
+        name: 'engGithub',
+        message: "What is this engineer's GitHub username?",
+        when: ({ engRank }) => engRank,
+        validate: engGithubInput => {
+          if (engGithubInput) {
+            return true;
+          } else {
+            console.log("What is this engineer's GitHub username?");
+            return false;
+          }
+        }
       },
       {
         type: 'confirm',
