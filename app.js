@@ -133,6 +133,70 @@ Add a New Employee
           }
         }
       },
+
+      {
+        type: 'confirm',
+        name: 'intRank',
+        message: "Is this employee an Intern?",
+        when: (engRank) => engRank == false,
+        default: true,
+        },
+      {
+        type: 'input',
+        name: 'intName',
+        message: "What is this intern's name?",
+        when: ({ intRank }) => intRank,
+        validate: intNameInput => {
+          if (intNameInput) {
+            return true;
+          } else {
+            console.log("What is this intern's name?");
+            return false;
+          }
+        }
+      },
+      {
+        type: 'input',
+        name: 'intID',
+        message: "What is this intern's employee ID?",
+        when: ({ intRank }) => intRank,
+        validate: intIDInput => {
+          if (intIDInput) {
+            return true;
+          } else {
+            console.log("What is this intern's employee ID?");
+            return false;
+          }
+        }
+      },
+      {
+        type: 'input',
+        name: 'intEmail',
+        message: "What is this intern's email?",
+        when: ({ intRank }) => intRank,
+        validate: intEmailInput => {
+          if (intEmailInput) {
+            return true;
+          } else {
+            console.log("What is this intern's email?");
+            return false;
+          }
+        }
+      },
+      {
+        type: 'input',
+        name: 'intSchool',
+        message: "What school does this intern attend?",
+        when: ({ intRank }) => intRank,
+        validate: intSchoolInput => {
+          if (intSchoolInput) {
+            return true;
+          } else {
+            console.log("What school does this intern attend?");
+            return false;
+          }
+        }
+      },
       {
         type: 'confirm',
         name: 'confirmAddEmployee',
