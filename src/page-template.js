@@ -10,9 +10,9 @@ function pageTop(manager){
       <link rel="stylesheet" href="style.css">
       <title>Knights of ${manager.name}</title>
   </head>
-  <body class="bg-secondary bg-opacity-10">
+  <body>
       <!-- header with title -->
-      <header class="bg-primary text-white">
+      <header>
           <h1>Riding Under The ${manager.name} Banner!</h1>
       </header>
   
@@ -25,8 +25,8 @@ function mgrGen(manager){
     console.log("ding");
   return `
   <div class="col-md-4 col-sm-1">
-      <div class="card border-info mb-3">
-          <div class="card-header text-white bg-info bg-gradient">
+      <div class="card">
+          <div class="card-header">
               <h5 class="card-title">${manager.name}</h5>
               <h6 class="card-subtitle"><i class="fas fa-dragon"></i> Manager</h6>
           </div>
@@ -45,8 +45,8 @@ function mgrGen(manager){
 function engGen(eng) {
   return `
   <div class="col-md-4 col-sm-1">
-      <div class="card border-info mb-3">
-          <div class="card-header text-white bg-info bg-gradient">
+      <div class="card">
+          <div class="card-header">
               <h5 class="card-title">${eng.name}</h5>
               <h6 class="card-subtitle"><i class="fas fa-chess-knight"></i> Engineer</h6>
           </div>
@@ -65,8 +65,8 @@ function engGen(eng) {
 function intGen(int){
   return `
   <div class="col-md-4 col-sm-1">
-      <div class="card border-info mb-3">
-          <div class="card-header text-white bg-info bg-gradient">
+      <div class="card">
+          <div class="card-header">
               <h5 class="card-title">${int.name}</h5>
               <h6 class="card-subtitle"><i class="fas fa-baby"></i> Intern</h6>
           </div>
