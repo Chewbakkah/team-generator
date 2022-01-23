@@ -1,6 +1,6 @@
 const inquirer = require('inquirer');
 const { writeFile, copyFile, appendFile } = require('./src/generate-site.js');
-const { pageTop, mgrGen, engGen, intGen, pageBtm} = require('./src/page-template');
+const { pageTop, engGen, intGen, pageBtm} = require('./src/page-template');
 const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
@@ -65,13 +65,9 @@ const promptMgr = () => {
     // create manager object
     const { name, ID, email, mgrOffice } = mgrInfo;
     const manager = new Manager(name, ID, email, mgrOffice);
-    //generates top of html content
+    //generates top of html content with mgr
     const top = pageTop(manager);
     writeFile(top);
-    //create mgr html
-    const mgrHTML = mgrGen(manager);
-    //append mgr info to html
-    appendFile(mgrHTML);
   })
 };
 const promptEmp = teamData => {
@@ -178,7 +174,7 @@ Add a New Employee
       }
     if(empInfo.confirmAddEmployee){
       promptEmp();
-    }
+    }else{console.log("Thank you for using Team Builder Eleventeen! Check the dist folder for your files.");}
     })
 };
 
