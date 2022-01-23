@@ -62,12 +62,12 @@ const promptMgr = () => {
     }
   ])
   .then(mgrInfo => {
-    //generates top of html content
-    const top = pageTop();
-    writeFile(top);
     // create manager object
     const { name, ID, email, mgrOffice } = mgrInfo;
     const manager = new Manager(name, ID, email, mgrOffice);
+    //generates top of html content
+    const top = pageTop(manager);
+    writeFile(top);
     //create mgr html
     const mgrHTML = mgrGen(manager);
     //append mgr info to html
@@ -163,7 +163,7 @@ Add a New Employee
       }
     ])
     .then(empInfo => {
-      let { empRank, name, ID, email, engGithub, intSchool } = employeeInfo;
+      let { empRank, name, ID, email, engGithub, intSchool } = empInfo;
       //check if emp = eng and apply eng object
       if(empRank === "Engineer"){
         let eng = new Engineer(name, ID, email, engGithub);
