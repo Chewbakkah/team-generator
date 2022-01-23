@@ -1,12 +1,16 @@
 const inquirer = require('inquirer');
-const { writeFile, copyFile } = require('./src/generate-site.js');
-const generatePage = require('./src/page-template');
+const { writeFile, copyFile, appendFile } = require('./src/generate-site.js');
+const { pageTop, mgrGen, engGen, intGen, pageBtm} = require('./src/page-template');
+const Manager = require('./lib/Manager');
+const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
 
 const promptMgr = () => {
+  console.log("Welcome To Team Builder Eleventeen");
   return inquirer.prompt([
     {
       type: 'input',
-      name: 'mgrName',
+      name: 'name',
       message: "What is the team manager's name?",
       validate: mgrNameInput => {
         if (mgrNameInput) {
@@ -19,7 +23,7 @@ const promptMgr = () => {
     },
     {
       type: 'input',
-      name: 'mgrID',
+      name: 'ID',
       message: "Enter manager's employee ID.",
       validate: mgrIDInput => {
         if (mgrIDInput) {
@@ -32,7 +36,7 @@ const promptMgr = () => {
     },
     {
       type: 'input',
-      name: 'mgrEmail',
+      name: 'email',
       message: "Enter manager's email.",
       validate: mgrEmailInput => {
         if (mgrEmailInput) {
@@ -56,65 +60,69 @@ const promptMgr = () => {
         }
       }
     }
-  ]);
+  ])
+  .then(mgrInfo => {
+    //generates top of html content
+    const top = pageTop();
+    writeFile(top);
+    // create manager object
+    const { name, ID, email, mgrOffice } = mgrInfo;
+    const manager = new Manager(name, ID, email, mgrOffice);
+    //create mgr html
+    const mgrHTML = mgrGen(manager);
+    //append mgr info to html
+    appendFile(mgrHTML);
+  })
 };
-const promptEmp = employeeData => {
+const promptEmp = teamData => {
   console.log(`
 =================
 Add a New Employee
 =================
 `);
-
-  // If there's no 'projects' array property, create one
-  if (!teamData.employee) {
-    teamData.employee = [];
-  }
   return inquirer
     .prompt([
       {
-        type: 'confirm',
-        name: 'engRank',
-        message: "Is this employee an Engineer?",
-        default: true,
+        type: 'list',
+        name: 'empRank',
+        message: "Is this employee an engineer or intern?",
+        choices: ["Engineer","Intern"]
         },
       {
         type: 'input',
-        name: 'engName',
-        message: "What is this engineer's name?",
-        when: ({ engRank }) => engRank,
-        validate: engNameInput => {
-          if (engNameInput) {
+        name: 'name',
+        message: "What is the employee's name?",
+        validate: nameInput => {
+          if (nameInput) {
             return true;
           } else {
-            console.log("What is this engineer's name?");
+            console.log("What is the employee's name?");
             return false;
           }
         }
       },
       {
         type: 'input',
-        name: 'engID',
-        message: "What is this engineer's employee ID?",
-        when: ({ engRank }) => engRank,
-        validate: engIDInput => {
-          if (engIDInput) {
+        name: 'ID',
+        message: "What is the employee's ID?",
+        validate: IDInput => {
+          if (IDInput) {
             return true;
           } else {
-            console.log("What is this engineer's employee ID?");
+            console.log("What is the employee's ID?");
             return false;
           }
         }
       },
       {
         type: 'input',
-        name: 'engEmail',
-        message: "What is this engineer's email?",
-        when: ({ engRank }) => engRank,
-        validate: engEmailInput => {
-          if (engEmailInput) {
+        name: 'email',
+        message: "What is the employee's email?",
+        validate: emailInput => {
+          if (emailInput) {
             return true;
           } else {
-            console.log("What is this engineer's email?");
+            console.log("What the employee's email?");
             return false;
           }
         }
@@ -123,7 +131,7 @@ Add a New Employee
         type: 'input',
         name: 'engGithub',
         message: "What is this engineer's GitHub username?",
-        when: ({ engRank }) => engRank,
+        when: ({ empRank }) => empRank === "Engineer",
         validate: engGithubInput => {
           if (engGithubInput) {
             return true;
@@ -133,61 +141,11 @@ Add a New Employee
           }
         }
       },
-
-      {
-        type: 'confirm',
-        name: 'intRank',
-        message: "Is this employee an Intern?",
-        when: (engRank) => engRank == false,
-        default: true,
-        },
-      {
-        type: 'input',
-        name: 'intName',
-        message: "What is this intern's name?",
-        when: ({ intRank }) => intRank,
-        validate: intNameInput => {
-          if (intNameInput) {
-            return true;
-          } else {
-            console.log("What is this intern's name?");
-            return false;
-          }
-        }
-      },
-      {
-        type: 'input',
-        name: 'intID',
-        message: "What is this intern's employee ID?",
-        when: ({ intRank }) => intRank,
-        validate: intIDInput => {
-          if (intIDInput) {
-            return true;
-          } else {
-            console.log("What is this intern's employee ID?");
-            return false;
-          }
-        }
-      },
-      {
-        type: 'input',
-        name: 'intEmail',
-        message: "What is this intern's email?",
-        when: ({ intRank }) => intRank,
-        validate: intEmailInput => {
-          if (intEmailInput) {
-            return true;
-          } else {
-            console.log("What is this intern's email?");
-            return false;
-          }
-        }
-      },
       {
         type: 'input',
         name: 'intSchool',
         message: "What school does this intern attend?",
-        when: ({ intRank }) => intRank,
+        when: ({ empRank }) => empRank === "Intern",
         validate: intSchoolInput => {
           if (intSchoolInput) {
             return true;
@@ -204,31 +162,27 @@ Add a New Employee
         default: false
       }
     ])
-    .then(employeeData => {
-      teamData.employee.push(employeeData);
-      if (employeeData.confirmAddEmployee) {
-        return promptEmp(teamData);
-      } else {
-        return teamData;
+    .then(empInfo => {
+      let { empRank, name, ID, email, engGithub, intSchool } = employeeInfo;
+      //check if emp = eng and apply eng object
+      if(empRank === "Engineer"){
+        let eng = new Engineer(name, ID, email, engGithub);
+        let engHTML = engGen(eng);
+        appendFile(engHTML);
       }
-    });
+      //check if emp = int and apply int obj
+      else if(empRank === "Intern"){
+        let int = new Intern(name, ID, email, intSchool);
+        let intHTML = intGen(int);
+        appendFile(intHTML);
+      }
+    if(empInfo.confirmAddEmployee){
+      promptEmp();
+    }
+    })
 };
 
 promptMgr()
   .then(promptEmp)
-  .then(teamData => {
-    return generatePage(teamData);
-  })
-  .then(pageHTML => {
-    return writeFile(pageHTML);
-  })
-  .then(writeFileResponse => {
-    console.log(writeFileResponse);
-    return copyFile();
-  })
-  .then(copyFileResponse => {
-    console.log(copyFileResponse);
-  })
-  .catch(err => {
-    console.log(err);
-  });
+  .then(appendFile(pageBtm()))
+  .then(copyFile());

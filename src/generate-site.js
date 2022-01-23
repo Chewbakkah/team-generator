@@ -36,4 +36,20 @@ const writeFile = fileContent => {
     });
   };
 
-  module.exports = { writeFile, copyFile };
+  //appends new employee info to body of html
+  const appendFile = bodyContent => {
+    return new Promise((resolve, reject) => {
+      fs.appendFile('./dist/index.html', bodyContent, err=> {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve({
+          ok: true,
+          message: 'File updated.'
+        });
+      });
+    });
+  };
+
+  module.exports = { writeFile, copyFile, appendFile };
