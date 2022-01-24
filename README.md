@@ -2,8 +2,8 @@
 
 ### For Questions Contact:
 ### Chewbakkah | [Github](https://github.com/Chewbakkah) | Email: chewbakkah@gmail.com
-### Video Walkthrough
-[link](https://drive.google.com/file/d/1rgWT-Nzv2FGxvwcm7a3ekW2GdJOdVq9Q/view)
+## Video Walkthrough
+[View on Google Drive](https://drive.google.com/file/d/1rgWT-Nzv2FGxvwcm7a3ekW2GdJOdVq9Q/view)
 This video is exporting to junk quality right now. I will find better software than the suggested screencastify for next week. It does not like 4k monitors.
 ## Description
 The goal of this project is to use Node to generate intake information about a team's structure and export an HTML file containing that info.
