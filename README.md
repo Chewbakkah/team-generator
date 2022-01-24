@@ -9,6 +9,8 @@ This video is exporting to junk quality right now. I will find better software t
 The goal of this project is to use Node to generate intake information about a team's structure and export an HTML file containing that info.
 ## Project-Installation-Instructions
   The user will need to have node.js installed. The user will need to run "npm install" to download the inquirer package and the jest package.
+## Testing
+  Testing is handled by jest. There are 3 tests instead of the suggested 4. Employee isn't needed as a test because it is reqired by all three of the other tests. If the other three pass then that proves the employee constructor works.
 ## Project-Usage-Instructions
   Install the inquirer package. Launch in command line with node app.js and follow instructions.
   The final files will be found in the dist folder.
